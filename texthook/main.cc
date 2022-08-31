@@ -24,6 +24,9 @@ namespace
 	AutoHandle<> hookPipe = INVALID_HANDLE_VALUE, mappedFile = INVALID_HANDLE_VALUE;
 	TextHook (*hooks)[MAX_HOOK];
 	int currentHook = 0;
+	char allowedHooksFileData[1000]{};
+	const char* ALLOW_LIST_LOADED = u8"Textractor: hook allow list loaded";
+	const char* HOOK_NOT_ALLOWED = u8"Textractor: hook %s not on allow list, aborting insertion";
 }
 
 DWORD WINAPI Pipe(LPVOID)
@@ -49,6 +52,7 @@ DWORD WINAPI Pipe(LPVOID)
 		WriteFile(hookPipe, buffer, sizeof(DWORD), &count, nullptr);
 
 		ConsoleOutput(PIPE_CONNECTED);
+		LoadAllowedHooks();
 		Engine::Hijack();
 
 		while (running && ReadFile(hostPipe, buffer, PIPE_BUFFER_SIZE, &count, nullptr))
@@ -146,10 +150,31 @@ BOOL WINAPI DllMain(HINSTANCE hModule, DWORD fdwReason, LPVOID)
 	return TRUE;
 }
 
+void LoadAllowedHooks()
+{
+	wchar_t *processName,
+            processPath[MAX_PATH];
+	GetModuleFileNameW(nullptr, processPath, MAX_PATH);
+	processName = wcsrchr(processPath, L'\\') + 1;
+	wchar_t allowedHooksFilename[MAX_PATH + std::size(ALLOWED_HOOKS_FILE)];
+	wcsncpy_s(allowedHooksFilename, processPath, MAX_PATH - 1);
+	wcscpy_s(wcsrchr(allowedHooksFilename, L'\\') + 1, std::size(ALLOWED_HOOKS_FILE), ALLOWED_HOOKS_FILE);
+	if (AutoHandle<> allowedHooksFile = CreateFileW(allowedHooksFilename, GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL))
+	{
+		ReadFile(allowedHooksFile, allowedHooksFileData, sizeof(allowedHooksFileData) - 1, DUMMY, nullptr);
+		loadedAllowedHooks = allowedHooksFileData;
+		ConsoleOutput(ALLOW_LIST_LOADED);
+	}
+}
+
 void NewHook(HookParam hp, LPCSTR lpname, DWORD flag)
 {
 	if (++currentHook >= MAX_HOOK) return ConsoleOutput(TOO_MANY_HOOKS);
 	if (lpname && *lpname) strncpy_s(hp.name, lpname, HOOK_NAME_SIZE - 1);
+	if (!HookAllowed(hp.name)) {
+		ConsoleOutput(HOOK_NOT_ALLOWED, hp.name);
+		return;
+	}
 	ConsoleOutput(INSERTING_HOOK, hp.name);
 	RemoveHook(hp.address, 0);
 	if (!(*hooks)[currentHook].Insert(hp, flag))
@@ -157,6 +182,17 @@ void NewHook(HookParam hp, LPCSTR lpname, DWORD flag)
 		ConsoleOutput(HOOK_FAILED);
 		(*hooks)[currentHook].Clear();
 	}
+}
+
+bool HookAllowed(const char* name)
+{
+	if (!loadedAllowedHooks) return true;
+	for (const char* hook = loadedAllowedHooks; hook; hook = strchr(hook + 1, '\t'))
+		for (auto start = name; *start; ++start)
+			for (int i = 0; ; ++i)
+				if (start[i] != hook[i + 1]) break;
+				else if (!hook[i + 2] || hook[i + 2] == '\t') return true;
+	return false;
 }
 
 void RemoveHook(uint64_t addr, int maxOffset)

@@ -6,11 +6,15 @@
 
 #include "types.h"
 
+inline const char *loadedAllowedHooks = nullptr;
+
 void TextOutput(ThreadParam tp, BYTE (*buffer)[PIPE_BUFFER_SIZE], int len);
 void ConsoleOutput(LPCSTR text, ...);
 void NotifyHookFound(HookParam hp, wchar_t* text);
 void NotifyHookRemove(uint64_t addr, LPCSTR name);
+void LoadAllowedHooks();
 void NewHook(HookParam hp, LPCSTR name, DWORD flag = HOOK_ENGINE);
+bool HookAllowed(const char* name);
 void RemoveHook(uint64_t addr, int maxOffset = 9);
 
 inline SearchParam spDefault;

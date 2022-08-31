@@ -25,5 +25,6 @@ constexpr auto PIPE_AVAILABLE_EVENT = L"TEXTRACTOR_PIPE_AVAILABLE";
 
 constexpr auto ITH_DLL = L"texthook"; // .dll but LoadLibrary automatically adds that
 constexpr auto& GAME_CONFIG_FILE = L"TextractorConfig.txt";
+constexpr auto& ALLOWED_HOOKS_FILE = L"AllowedHooks.txt";
 
 // EOF
