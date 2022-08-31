@@ -1,52 +1,63 @@
-# Textractor
+# Textractor-HookAllowlist
 
-![How it looks](screenshot.png)
+[Textractor] `texthook.dll` modification that allows blocking unnecessary
+hooks. By default, the functionality is unchanged. But if there is an
+`AllowedHooks.txt` file in the directory of the game’s executable file, only
+hooks with names matching those listed in that file are allowed to be inserted.
 
-[English](README.md) ● [Español](README_ES.md) ● [简体中文](README_SC.md) ● [Русский](README_RU.md) ● [한국어](README_KR.md) ● [ภาษาไทย](README_TH.md) ● [Français](README_FR.md) ● [Italiano](README_IT.md) ● [日本語](README_JP.md) ● [Bahasa Indonesia](README_ID.md) ● [Português](README_PT.md)
+## How to use
 
-**Textractor** (a.k.a. NextHooker) is an open-source x86/x64 video game text hooker for Windows 7+ (and Wine) based off of [ITHVNR](https://web.archive.org/web/20160202084144/http://www.hongfire.com/forum/showthread.php/438331-ITHVNR-ITH-with-the-VNR-engine).<br>
-Watch the [tutorial video](docs/TUTORIAL.md) for a quick rundown on using it.
+1. Install the regular Textractor version.
 
-## Download
+1. Download this repository’s [release archive][releases]. It contains 32- and
+   64-bit versions of the modified `texthook.dll` file.
 
-Official stable releases of Textractor can be found [here](https://github.com/Artikash/Textractor/releases).<br>
-The last release of ITHVNR can be found [here](https://drive.google.com/open?id=13aHF4uIXWn-3YML_k2YCDWhtGgn5-tnO).<br>
-Experimental builds of Textractor (with debug info) from the latest source can be found [here](https://ci.appveyor.com/project/Artikash/textractor/history) in the 'Artifacts' section of each job.
+1. Replace the appropriate original `texthook.dll` in the regular Textraction
+   installation directory with the appropriate modified `texthook.dll` file
+   from the extracted release archive.
 
-## Features
+1. Launch Textractor along with your game.
 
-- Highly extensible and customizable
-- Auto hook many game engines (including some not supported by VNR!)
-- Hook text using /H "hook" codes (most AGTH codes supported)
-- Automatically search for possible hook codes
+1. Attach Textractor to the game.
 
-## Support
+1. Add custom hooks if necessary.
 
-Let me know of any bugs, games that Textractor has trouble hooking, feature requests, or other suggestions by posting an issue.<br>
-If you have trouble hooking a game, please show me a way to freely download it or gift it to me on [Steam](https://steamcommunity.com/profiles/76561198097566313/).
+1. Verify whether the text is extracted.
 
-## Extensions
+1. Click “Save hook(s)” to make Textractor remember the game along with any
+   custom hooks.
 
-See my [Example Extension project](https://github.com/Artikash/ExampleExtension) to see how to build an extension.<br>
-See the extensions folder for examples of what extensions can do. 
+1. Note the *names* of the hooks you want to keep. The names are specified in
+   the top dropdown.
 
-## Contributing
+   For example, [on this screenshot][names-ss], the name of the hook is
+   `GetGlyphOutlineW`.
 
-All contributions are appreciated! Please email me at akashmozumdar@gmail.com if you have any questions about the codebase.<br>
-You should use the standard process of making a pull request (fork, branch, commit changes, make PR from your branch to my master).<br>
-Contributing a translation is easy: text.cpp contains all of the text strings that you need to translate. Translations of this README or the tutorial video transcript are also welcome.
+1. Create `AllowedHooks.txt` in the same directory as the game’s exe file and
+   place the hook names in that file.
 
-## Compiling
-Before compiling Textractor, you need Qt version 5.13 and Visual Studio with CMake support.
-Clone Textractor's source and initialize submodules with `git clone https://github.com/Artikash/Textractor.git` and `git submodule update --init`.
-You should then be able to just open the source folder in Visual Studio and build.
+   The names should be in a single line, and they should **all** be terminated
+   with a <kbd>TAB</kbd> character.
 
-## Project Architecture
+   > Examples:
+   >
+   > - I want to only allow hooks named `UserHook1`:
+   >
+   > ```txt
+   > UserHook1[TAB]
+   > ```
+   >
+   > - I want to only allow hooks named `KiriKiri1` or `KiriKiri2`:
+   >
+   > ```txt
+   > KiriKiri1[TAB]KiriKiri2[TAB]
+   > ```
 
-The host injects texthook into the target process and connects to it via 2 pipe files.
-texthook waits for the pipe to be connected, then injects a few instructions into any text outputting functions (e.g. TextOut, GetGlyphOutline) that cause their input to be sent through the pipe.<br>
-Additional information about hooks is exchanged via shared memory.<br>
-The text that the host receives through the pipe is then processed a little before being dispatched back to the GUI.<br>
-Finally, the GUI dispatches the text to extensions before displaying it.
+1. Close Textractor and the game, and reopen them.
 
-## [Developers](docs/CREDITS.md)
+Only hooks with the listed names should be inserted now. If you wish to allow
+all hooks again, simply remove the file, or just rename it.
+
+[Textractor]: https://github.com/Artikash/Textractor
+[releases]: https://github.com/fauu/Textractor-HookAllowlist/releases/
+[names-ss]: https://i.imgur.com/UHQvR35.png
