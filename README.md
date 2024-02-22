@@ -56,8 +56,8 @@ hooks with names matching those listed in that file are allowed to be inserted.
 
    > [!WARNING]
    > If you are hooking a Unity game, you will need to allow the `Mono Searcher`
-   hook alongside your target hooks. Otherwise your target hooks will not be
-   inserted.
+   > hook alongside your target hooks. Otherwise your target hooks will not be
+   > inserted.
 
 1. Close Textractor and the game, and reopen them.
 
