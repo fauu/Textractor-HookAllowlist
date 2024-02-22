@@ -37,7 +37,8 @@ hooks with names matching those listed in that file are allowed to be inserted.
    place the hook names in that file.
 
    The names should be in a single line, and they should **all** be terminated
-   with a <kbd>TAB</kbd> character.
+   with a <kbd>TAB</kbd> character (copy it from here: `	`; text editors
+   sometimes just insert spaces when <kbd>TAB</kbd> is pressed).
 
    > Examples:
    >
@@ -52,6 +53,11 @@ hooks with names matching those listed in that file are allowed to be inserted.
    > ```txt
    > KiriKiri1[TAB]KiriKiri2[TAB]
    > ```
+
+   > [!WARNING]
+   > If you are hooking a Unity game, you will need to allow the `Mono Searcher`
+   hook alongside your target hooks. Otherwise your target hooks will not be
+   inserted.
 
 1. Close Textractor and the game, and reopen them.
 
