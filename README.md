@@ -30,34 +30,34 @@ hooks with names matching those listed in that file are allowed to be inserted.
 1. Note the *names* of the hooks you want to keep. The names are specified in
    the top dropdown.
 
-   For example, [on this screenshot][names-ss], the name of the hook is
-   `GetGlyphOutlineW`.
+    For example, [on this screenshot][names-ss], the name of the hook is
+    `GetGlyphOutlineW`.
 
 1. Create `AllowedHooks.txt` in the same directory as the game’s exe file and
    place the hook names in that file.
 
-   The names should be in a single line, and they should **all** be terminated
-   with a <kbd>TAB</kbd> character (copy it from here: `	`; text editors
-   sometimes just insert spaces when <kbd>TAB</kbd> is pressed).
+    The names should be in a single line, and they should **all** be terminated
+    with a <kbd>TAB</kbd> character (copy it from here: `	`; text editors
+    sometimes just insert spaces when <kbd>TAB</kbd> is pressed).
 
-   > Examples:
-   >
-   > - I want to only allow hooks named `UserHook1`:
-   >
-   > ```txt
-   > UserHook1[TAB]
-   > ```
-   >
-   > - I want to only allow hooks named `KiriKiri1` or `KiriKiri2`:
-   >
-   > ```txt
-   > KiriKiri1[TAB]KiriKiri2[TAB]
-   > ```
+    > Examples:
+    >
+    > - I want to only allow hooks named `UserHook1`:
+    >
+    > ```txt
+    > UserHook1[TAB]
+    > ```
+    >
+    > - I want to only allow hooks named `KiriKiri1` or `KiriKiri2`:
+    >
+    > ```txt
+    > KiriKiri1[TAB]KiriKiri2[TAB]
+    > ```
 
-   > [!WARNING]
-   > If you are hooking a Unity game, you will need to allow the `Mono Searcher`
-   > hook alongside your target hooks. Otherwise your target hooks will not be
-   > inserted.
+    > [!WARNING]
+    > If you are hooking a Unity game, you will need to allow the `Mono Searcher`
+    > hook alongside your target hooks. Otherwise your target hooks will not be
+    > inserted.
 
 1. Close Textractor and the game, and reopen them.
 
